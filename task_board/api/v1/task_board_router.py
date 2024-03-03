@@ -41,8 +41,6 @@ async def get_task_board(
     status_code=status.HTTP_200_OK,
 )
 async def create_task_board(
-    search: str | None = None,
-    is_deleted: bool | None = None,
 ):
     return "get_task_board"
 
@@ -52,8 +50,6 @@ async def create_task_board(
     status_code=status.HTTP_200_OK,
 )
 async def update_task_board(
-    search: str | None = None,
-    is_deleted: bool | None = None,
 ):
     return "get_task_board"
 
@@ -63,8 +59,6 @@ async def update_task_board(
     status_code=status.HTTP_200_OK,
 )
 async def delete_task_board(
-    search: str | None = None,
-    is_deleted: bool | None = None,
 ):
     return "get_task_board"
 
@@ -74,7 +68,5 @@ async def delete_task_board(
     status_code=status.HTTP_200_OK,
 )
 async def assign_tasks(
-    search: str | None = None,
-    is_deleted: bool | None = None,
 ):
     return "assign_tasks"
