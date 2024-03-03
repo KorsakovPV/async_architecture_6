@@ -37,6 +37,3 @@ services:
       - 8000:8000
     depends_on:
       - auth_postgres_db
-
-#volumes:
-#  pg_data: { }
