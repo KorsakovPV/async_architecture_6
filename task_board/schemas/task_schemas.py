@@ -22,13 +22,13 @@ class BaseEditSchema(BaseModel):
 
 
 class TaskBaseSchema(BaseModel):
-    assigned_user_id: UUID
     description: str
-    status: Literal["pending", "done"]
+
 
 
 class TaskReadSchema(TaskBaseSchema, BaseReadSchema):
-    pass
+    assigned_user_id: UUID | None
+    status: Literal["pending", "done"]
 
 
 class TaskCreateSchema(TaskBaseSchema, BaseCreateSchema):
@@ -36,4 +36,5 @@ class TaskCreateSchema(TaskBaseSchema, BaseCreateSchema):
 
 
 class TaskEditSchema(TaskBaseSchema, BaseEditSchema):
-    pass
+    description: str | None = None
+    status: Literal["pending", "done"]

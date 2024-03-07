@@ -1,12 +1,18 @@
 import uuid
 
-from fastapi import APIRouter
 from fastapi_users import FastAPIUsers
 
 from auth_backend.auth_jwt_bearer_backend import auth_backend
 from auth_backend.user_manager import get_user_manager
+from db.base import get_async_session
 from db.model import User
 from schemas.auth_schemas import UserCreate, UserRead, UserUpdate
+
+
+from fastapi import APIRouter, status, Depends
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 auth_router = APIRouter(prefix="")
 
@@ -42,3 +48,19 @@ auth_router.include_router(
     prefix="/users",
     tags=["users"],
 )
+
+
+@auth_router.get(
+    "/get_users", status_code=status.HTTP_200_OK, response_model=list[UserRead]
+)
+async def get_users(session: AsyncSession = Depends(get_async_session)):
+    statement = select(User).where(
+        User.role.in_(
+            [
+                "user",
+            ]
+        )
+    )
+    results = await session.execute(statement=statement)
+    users = results.scalars().all()
+    return users
