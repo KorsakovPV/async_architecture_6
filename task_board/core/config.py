@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Annotated
 
-from pydantic import PostgresDsn, SecretStr, field_validator
+from pydantic import HttpUrl, PostgresDsn, SecretStr, field_validator
 from pydantic_core.core_schema import ValidationInfo
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -33,6 +33,8 @@ class Settings(BaseSettings):
     # Postgres logs
     SQL_LOGS: bool = False
     SQL_POOL_LOGS: bool = False
+
+    AUTH_API: HttpUrl = "http://127.0.0.1:8000/api/"
 
     model_config = SettingsConfigDict(env_file=APP_DIR / ".env")
 

@@ -10,7 +10,7 @@ class BaseReadSchema(BaseModel):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class BaseCreateSchema(BaseModel):
@@ -23,7 +23,6 @@ class BaseEditSchema(BaseModel):
 
 class TaskBaseSchema(BaseModel):
     description: str
-
 
 
 class TaskReadSchema(TaskBaseSchema, BaseReadSchema):

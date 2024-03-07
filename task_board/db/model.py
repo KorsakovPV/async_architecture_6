@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Annotated
 
 from sqlalchemy import TEXT, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, MappedAsDataclass
+from sqlalchemy.orm import DeclarativeBase, Mapped, MappedAsDataclass, mapped_column
 
 text = Annotated[str, mapped_column(TEXT)]
 
