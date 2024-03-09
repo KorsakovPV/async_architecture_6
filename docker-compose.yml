@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  auth_postgres_db:
+    image: postgres:15.3
+    container_name: auth_postgres_db
+    restart: always
+    environment:
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+#      POSTGRES_DB: ${AUTH_DB_NAME}
+      POSTGRES_PORT: ${DB_PORT}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+    volumes:
+      - ./pg_data/auth:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  auth:
+    build:
+      context: .
+      dockerfile: ./auth/Dockerfile
+    image: docker-auth
+    container_name: auth
+    restart: always
+    environment:
+      AUTH_DB_HOST: auth_postgres_db
+      AUTH_DB_USER: ${AUTH_DB_USER}
+      AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD}
+      AUTH_DB_NAME: ${AUTH_DB_NAME}
+      AUTH_DB_PORT: ${AUTH_DB_PORT}
+      PUBLIC_KEY: ${PUBLIC_KEY}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+    ports:
+      - 8000:8000
+    depends_on:
+      - auth_postgres_db
