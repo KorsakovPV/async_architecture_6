@@ -25,3 +25,4 @@ class TaskBoard(Base):
     created_at: Mapped[datetime] = mapped_column(
         server_default=func.current_timestamp(), init=False
     )
+    is_billing: Mapped[bool] = mapped_column(default=False, init=False)

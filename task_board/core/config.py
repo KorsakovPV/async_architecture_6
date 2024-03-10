@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     SQL_POOL_LOGS: bool = False
 
     AUTH_API: HttpUrl = "http://127.0.0.1:8000/api/"
+    KAFKA_BOOTSTRAP_SERVERS: str = "127.0.0.1:29092"
 
     model_config = SettingsConfigDict(env_file=APP_DIR / ".env")
 

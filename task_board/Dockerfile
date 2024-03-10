@@ -7,7 +7,7 @@ ENV POETRY_VERSION=1.7.1
 RUN pip install "poetry==$POETRY_VERSION"
 RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
 
-COPY ./auth /code
+COPY ./task_board /code
 
-CMD ["uvicorn", "main:app_task_board", "--host", "0.0.0.0", "--port", "8001"]
+#CMD ["uvicorn", "main:app_task_board", "--host", "0.0.0.0", "--port", "8001"]
 

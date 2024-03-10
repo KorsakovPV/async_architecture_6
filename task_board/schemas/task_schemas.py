@@ -28,6 +28,7 @@ class TaskBaseSchema(BaseModel):
 class TaskReadSchema(TaskBaseSchema, BaseReadSchema):
     assigned_user_id: UUID | None
     status: Literal["pending", "done"]
+    is_billing: bool
 
 
 class TaskCreateSchema(TaskBaseSchema, BaseCreateSchema):
