@@ -1,9 +1,12 @@
+import asyncio
+
 import uvicorn
 from fastapi import FastAPI
 
 from api.api_router import api_router
 from core.config import app_settings
 from core.logs import logger
+from scheduled_tasks import task_board_scheduler
 
 app_task_board = FastAPI(
     title=app_settings.APP_TITLE,
@@ -13,6 +16,7 @@ app_task_board = FastAPI(
 )
 
 app_task_board.include_router(api_router)
+asyncio.create_task(task_board_scheduler.main())
 
 
 if __name__ == "__main__":

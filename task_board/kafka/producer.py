@@ -15,5 +15,6 @@ async def send_one():
         # Wait for all pending messages to be delivered or expire.
         await producer.stop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     asyncio.run(send_one())

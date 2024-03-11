@@ -5,6 +5,8 @@ services:
     image: postgres:15.3
     container_name: auth_postgres_db
     restart: always
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
     environment:
       POSTGRES_HOST: ${DB_HOST}
       POSTGRES_USER: ${DB_USER}

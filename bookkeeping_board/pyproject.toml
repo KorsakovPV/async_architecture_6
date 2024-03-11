@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "bookkeeping-board"
+version = "0.1.0"
+description = ""
+authors = ["Pavel Korsakov <PKorsakov@datafort.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.110.0"
+uvicorn = "^0.28.0"
+aiokafka = "^0.10.0"
+pydantic-settings = "^2.2.1"
+sqlalchemy = "^2.0.28"
+alembic = "^1.13.1"
+asyncpg = "^0.29.0"
+apscheduler = "^3.10.4"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.2.0"
+flake8 = "^7.0.0"
+isort = "^5.13.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
