@@ -38,3 +38,12 @@ class TaskCreateSchema(TaskBaseSchema, BaseCreateSchema):
 class TaskEditSchema(TaskBaseSchema, BaseEditSchema):
     description: str | None = None
     status: Literal["pending", "done"]
+
+
+class TaskBrockerMassageSchemaV1(BaseModel):
+    """Схема для отправки сообщений в брокер"""
+    title: str = "Billing.Accruals.v1"
+    description: str = "json schema for billing accruals event (version 1)"
+    event_datetime: datetime | None = None
+    version: int = 1
+    body: list[TaskReadSchema]

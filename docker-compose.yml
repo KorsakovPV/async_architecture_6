@@ -11,7 +11,6 @@ services:
       POSTGRES_HOST: ${DB_HOST}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-#      POSTGRES_DB: ${AUTH_DB_NAME}
       POSTGRES_PORT: ${DB_PORT}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
@@ -60,27 +59,6 @@ services:
 #    depends_on:
 #      - auth_postgres_db
 #    entrypoint: ["uvicorn", "main:app_task_board", "--host", "0.0.0.0", "--port", "8001"]
-#
-#  task_board_scheduled:
-#    build:
-#      context: .
-#      dockerfile: ./task_board/Dockerfile
-#    image: docker-task_board
-#    container_name: task_board
-#    restart: always
-#    environment:
-#      AUTH_DB_HOST: auth_postgres_db
-#      AUTH_DB_USER: ${AUTH_DB_USER}
-#      AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD}
-#      AUTH_DB_NAME: ${AUTH_DB_NAME}
-#      AUTH_DB_PORT: ${AUTH_DB_PORT}
-#      PUBLIC_KEY: ${PUBLIC_KEY}
-#      PRIVATE_KEY: ${PRIVATE_KEY}
-#    ports:
-#      - 8000:8000
-#    depends_on:
-#      - auth_postgres_db
-#    entrypoint: ["python", "scheduled_tasks/task_board_scheduler.py"]
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest

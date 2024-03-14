@@ -21,7 +21,7 @@ class BaseEditSchema(BaseModel):
     pass
 
 
-class TaskBaseSchema(BaseModel):
+class BillingTaskBaseSchema(BaseModel):
     assigned_user_id: UUID | None
     task_id: UUID | None
     # sent_email: bool = False
@@ -30,15 +30,15 @@ class TaskBaseSchema(BaseModel):
     award: int = 100
 
 
-class TaskReadSchema(TaskBaseSchema, BaseReadSchema):
+class BillingTaskReadSchema(BillingTaskBaseSchema, BaseReadSchema):
     pass
 
 
-class TaskCreateSchema(TaskBaseSchema, BaseCreateSchema):
+class BillingTaskCreateSchema(BillingTaskBaseSchema, BaseCreateSchema):
     pass
 
 
-class TaskEditSchema(TaskBaseSchema, BaseEditSchema):
+class BillingTaskEditSchema(BillingTaskBaseSchema, BaseEditSchema):
     pass
 
 
@@ -61,3 +61,36 @@ class DailyBillingCreateSchema(DailyBillingBaseSchema, BaseCreateSchema):
 
 class DailyBillingEditSchema(DailyBillingBaseSchema, BaseEditSchema):
     pass
+
+
+class BaseReadSchema(BaseModel):
+    id: UUID
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class TaskBaseSchema(BaseModel):
+    description: str
+
+
+class TaskReadSchema(TaskBaseSchema, BaseReadSchema):
+    assigned_user_id: UUID | None
+    status: Literal["pending", "done"]
+    is_billing: bool
+
+
+class TaskBrockerMassageSchema(BaseModel):
+    """Схема для отправки сообщений в брокер"""
+    title: str = ""
+    description: str = ""
+    event_datetime: datetime | None = None
+    version: int
+    body: list[TaskReadSchema]
+
+class UnprocessedEventsSchema(BaseModel):
+    """Схема для отправки сообщений в брокер"""
+    topic: str = ""
+    message: str = ""
+    error: str = ""
