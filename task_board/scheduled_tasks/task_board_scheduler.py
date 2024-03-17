@@ -24,6 +24,9 @@ scheduler = AsyncIOScheduler()
 
 
 async def push_assign_users(assigned_users):
+    """
+    Пушим событие таска заасайнена.
+    """
     push_datetime = datetime.now()
 
     producer = AIOKafkaProducer(bootstrap_servers=app_settings.KAFKA_BOOTSTRAP_SERVERS)
@@ -33,7 +36,12 @@ async def push_assign_users(assigned_users):
             "event_datetime": push_datetime,
             "version": 1,
             "body": [
-                TaskAssignSchema(assigned_user_id=UUID(assigned_user_id), price=price)
+                TaskAssignSchema(
+                    # id пользователя на кого заасайнена
+                    assigned_user_id=UUID(assigned_user_id),
+                    # Сколько с пользователя нужно будет снять при биллинге
+                    price=price
+                )
                 for assigned_user_id, price in assigned_users
             ],
         }
@@ -46,12 +54,14 @@ async def push_assign_users(assigned_users):
         await producer.stop()
 
 async def push_done_tasks():
-    # print('push_done_jobs')
+    """
+    По крону пушим завершенные таски. Устанавливаем is_billing в True. Повторно таску в биллинг не передать.
+    """
     push_datetime = datetime.now()
 
     async with async_session_maker() as session:
-        # statement = update(TaskBoard).where(
-        statement = select(TaskBoard).where(
+        statement = update(TaskBoard).where(
+        # statement = select(TaskBoard).where(
             and_(
                 TaskBoard.status.in_(
                     [
@@ -65,15 +75,13 @@ async def push_done_tasks():
                 ]
             ),
             TaskBoard.assigned_user_id.is_not(None)
-            # ).values({'is_billing': True}).returning(TaskBoard)
-        )
+            ).values({'is_billing': True}).returning(TaskBoard)
+        # )
         billing_tasks = (await session.execute(statement)).scalars().all()
 
         await session.commit()
 
         logger.info(f"Task for billing {billing_tasks}")
-
-    # TODO Передать таски в биллинг
 
     producer = AIOKafkaProducer(bootstrap_servers=app_settings.KAFKA_BOOTSTRAP_SERVERS)
     await producer.start()
@@ -101,8 +109,8 @@ async def main():
 
     scheduler.add_job(
         push_done_tasks,
-        # trigger='cron', hour=0, minute=0,
-        trigger="interval", seconds=6,
+        trigger='cron', hour=0, minute=0,
+        # trigger="interval", seconds=6,
     )
 
     scheduler.start()
