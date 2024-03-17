@@ -8,7 +8,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from core.config import app_settings
 from db.base import get_async_session
 from db.model import TaskBoard
+from scheduled_tasks.task_board_scheduler import push_assign_users
 from schemas.task_schemas import TaskCreateSchema, TaskEditSchema, TaskReadSchema
+import random
 
 task_board_router = APIRouter(prefix="/task_board")
 
@@ -118,12 +120,19 @@ async def assign_tasks(
 
     users_id = list(users_id)
 
-    for uncomplete_task in uncomplete_tasks:
-        import random
+    assigned_users = []
 
-        setattr(uncomplete_task, "assigned_user_id", random.choice(users_id))
-        print(uncomplete_task)
+    for uncomplete_task in uncomplete_tasks:
+
+        assigned_user_id = random.choice(users_id)
+
+        setattr(uncomplete_task, "assigned_user_id", assigned_user_id)
+
+        # Небольшое отступление от ТЗ стоимость ассайна зафиксирована.
+        assigned_users.append((assigned_user_id, -10))
 
     await session.commit()
+
+    await push_assign_users(assigned_users)
 
     return uncomplete_tasks
