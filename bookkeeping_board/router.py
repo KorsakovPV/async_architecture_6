@@ -25,6 +25,9 @@ class ErrorUnprocessedVersion(Exception):
 
 
 async def message_assign_task_to_billing_v1(messages):
+    """
+    Обработчик для события assign_task V1
+    """
     async with async_session_maker() as session:
         for message in messages:
             daily_billing = DailyBillingCreateSchema(
@@ -45,6 +48,9 @@ async def message_assign_task_to_billing_v1(messages):
 
 
 async def message_process_task_to_billing_v1(messages):
+    """
+    Обработчик для события tasks.closed V1
+    """
     create_tasks = []
     async with async_session_maker() as session:
         for message in messages:
@@ -93,6 +99,9 @@ async def message_process_task_to_billing_v1(messages):
 
 
 async def message_process_task_to_billing(message):
+    """
+    Общий обработчик для события tasks.closed
+    """
     message_dict = json.loads(json.loads(message.value))
     message_obj = TaskBrockerMassageSchema(**message_dict)
     if message_obj.version == 1:
@@ -103,6 +112,9 @@ async def message_process_task_to_billing(message):
 
 
 async def message_assign_task_to_billing(message):
+    """
+    Общий обработчик для события tasks.assigned
+    """
     message_dict = json.loads(json.loads(message.value))
     message_obj = TaskAssignMassageSchema(**message_dict)
     if message_obj.version == 1:
@@ -113,6 +125,9 @@ async def message_assign_task_to_billing(message):
 
 
 async def message_process(message):
+    """
+    Сообщения из разных топиков кладем в раные обработчики.
+    """
     if message.topic == "tasks.closed":
         await message_process_task_to_billing(message)
     if message.topic == "tasks.assigned":
@@ -142,6 +157,9 @@ async def consume_message():
 
 
 async def save_error_message(error, message):
+    """
+    Все не обработанные сообщения сохраняем.
+    """
     error_message = f"message_process is filed with {error=}"
     logger.error(error_message)
     async with async_session_maker() as session:
