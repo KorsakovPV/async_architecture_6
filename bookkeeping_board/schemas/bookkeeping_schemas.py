@@ -94,3 +94,16 @@ class UnprocessedEventsSchema(BaseModel):
     topic: str = ""
     message: str = ""
     error: str = ""
+
+class TaskAssignSchema(BaseModel):
+    assigned_user_id: UUID
+    price: int = -10
+
+class TaskAssignMassageSchema(BaseModel):
+    """Схема для отправки сообщений в брокер"""
+    title: str = ""
+    description: str = ""
+    event_datetime: datetime | None = None
+    version: int = 1
+    body: list[TaskAssignSchema]
+
